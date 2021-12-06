@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"reflect"
 	"strconv"
 	"testing"
 )
@@ -109,4 +110,26 @@ func TestLineOrientation(t *testing.T) {
 			t.Errorf("got %s wanted %s", got, want)
 		}
 	})
+}
+
+func TestGetPoints(t *testing.T) {
+	l := LineSegment{
+		Start: Coordinate{
+			X: 1,
+			Y: 1,
+		},
+		End: Coordinate{
+			X: 1,
+			Y: 3,
+		},
+	}
+	got := l.getPoints()
+	want := []Coordinate{
+		{X: 1, Y: 1},
+		{X: 1, Y: 2},
+		{X: 1, Y: 3},
+	}
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %v want %v\n", got, want)
+	}
 }
