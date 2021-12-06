@@ -55,3 +55,58 @@ func TestGetCoordinatePairs(t *testing.T) {
 		assertInt(t, y, expectedY)
 	})
 }
+
+func TestLineOrientation(t *testing.T) {
+	t.Run("Horizontal", func(t *testing.T) {
+		l := LineSegment{
+			Start: Coordinate{
+				X: 1,
+				Y: 10,
+			},
+			End: Coordinate{
+				X: 10,
+				Y: 10,
+			},
+		}
+		want := l.getOrientation()
+		got := Horizontal
+		if got != want {
+			t.Errorf("got %s wanted %s", got, want)
+		}
+	})
+	t.Run("Vertical", func(t *testing.T) {
+		l := LineSegment{
+			Start: Coordinate{
+				X: 1,
+				Y: 1,
+			},
+			End: Coordinate{
+				X: 1,
+				Y: 10,
+			},
+		}
+		want := l.getOrientation()
+		got := Vertical
+		if got != want {
+			t.Errorf("got %s wanted %s", got, want)
+		}
+	})
+	// Single point lines default to being vertical
+	t.Run("Single point", func(t *testing.T) {
+		l := LineSegment{
+			Start: Coordinate{
+				X: 1,
+				Y: 1,
+			},
+			End: Coordinate{
+				X: 1,
+				Y: 1,
+			},
+		}
+		want := l.getOrientation()
+		got := Vertical
+		if got != want {
+			t.Errorf("got %s wanted %s", got, want)
+		}
+	})
+}
