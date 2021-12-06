@@ -39,43 +39,76 @@ func (l LineSegment) getOrientation() Orientation {
 func (l LineSegment) getPoints() []Coordinate {
 	var points []Coordinate
 	if l.getOrientation() == Vertical {
-		to := l.End.Y
-		from := l.Start.Y
-
-		if l.Start.Y > l.End.Y {
-			to = l.Start.Y
-			from = l.End.Y
-		}
-
-		for i := from; i <= to; i++ {
-			p := Coordinate{
-				X: l.Start.X,
-				Y: i,
-			}
-			points = append(points, p)
-		}
+		points = l.getVerticalPoints()
 	} else if l.getOrientation() == Horizontal {
-		to := l.End.X
-		from := l.Start.X
-
-		if l.Start.X > l.End.X {
-			to = l.Start.X
-			from = l.End.X
-		}
-
-		for i := from; i <= to; i++ {
-			p := Coordinate{
-				X: i,
-				Y: l.Start.Y,
+		points = l.getHorizontalPoints()
+	} else if l.getOrientation() == Diagonal {
+		decrementX := l.End.X < l.Start.X
+		decrementY := l.End.Y < l.Start.Y
+		x, y := l.Start.X, l.Start.Y
+		points = append(points, l.Start)
+		for x != l.End.X && y != l.End.Y {
+			if decrementX {
+				x--
+			} else {
+				x++
 			}
+
+			if decrementY {
+				y--
+			} else {
+				y++
+			}
+			p := Coordinate{X: x, Y: y}
 			points = append(points, p)
 		}
 	}
 	return points
 }
 
+func (l LineSegment) getHorizontalPoints() []Coordinate {
+	var points []Coordinate
+
+	to := l.End.X
+	from := l.Start.X
+
+	if l.Start.X > l.End.X {
+		to = l.Start.X
+		from = l.End.X
+	}
+
+	for i := from; i <= to; i++ {
+		p := Coordinate{
+			X: i,
+			Y: l.Start.Y,
+		}
+		points = append(points, p)
+	}
+	return points
+}
+
+func (l LineSegment) getVerticalPoints() []Coordinate {
+	var points []Coordinate
+	to := l.End.Y
+	from := l.Start.Y
+
+	if l.Start.Y > l.End.Y {
+		to = l.Start.Y
+		from = l.End.Y
+	}
+
+	for i := from; i <= to; i++ {
+		p := Coordinate{
+			X: l.Start.X,
+			Y: i,
+		}
+		points = append(points, p)
+	}
+	return points
+}
+
 func main() {
-	content, _ := ioutil.ReadFile("input.txt")
+	content, _ := ioutil.ReadFile("input1.txt")
 	split := strings.Split(string(content), "\n")
 	collisionPoints := make(map[Coordinate]bool, len(split))
 	numCollisions := 0

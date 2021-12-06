@@ -113,23 +113,70 @@ func TestLineOrientation(t *testing.T) {
 }
 
 func TestGetPoints(t *testing.T) {
-	l := LineSegment{
-		Start: Coordinate{
-			X: 1,
-			Y: 1,
-		},
-		End: Coordinate{
-			X: 1,
-			Y: 3,
-		},
-	}
-	got := l.getPoints()
-	want := []Coordinate{
-		{X: 1, Y: 1},
-		{X: 1, Y: 2},
-		{X: 1, Y: 3},
-	}
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf("got %v want %v\n", got, want)
-	}
+
+	t.Run("Horizontal Line", func(t *testing.T) {
+		l := LineSegment{
+			Start: Coordinate{
+				X: 1,
+				Y: 1,
+			},
+			End: Coordinate{
+				X: 1,
+				Y: 3,
+			},
+		}
+		got := l.getPoints()
+		want := []Coordinate{
+			{X: 1, Y: 1},
+			{X: 1, Y: 2},
+			{X: 1, Y: 3},
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %v want %v\n", got, want)
+		}
+	})
+
+	t.Run("Diagonal Line", func(t *testing.T) {
+		l := LineSegment{
+			Start: Coordinate{
+				X: 1,
+				Y: 1,
+			},
+			End: Coordinate{
+				X: 3,
+				Y: 3,
+			},
+		}
+		got := l.getPoints()
+		want := []Coordinate{
+			{X: 1, Y: 1},
+			{X: 2, Y: 2},
+			{X: 3, Y: 3},
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %v want %v\n", got, want)
+		}
+	})
+
+	t.Run("Diagonal Line Down", func(t *testing.T) {
+		l := LineSegment{
+			Start: Coordinate{
+				X: 9,
+				Y: 7,
+			},
+			End: Coordinate{
+				X: 7,
+				Y: 9,
+			},
+		}
+		got := l.getPoints()
+		want := []Coordinate{
+			{X: 9, Y: 7},
+			{X: 8, Y: 8},
+			{X: 7, Y: 9},
+		}
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %v want %v\n", got, want)
+		}
+	})
 }
